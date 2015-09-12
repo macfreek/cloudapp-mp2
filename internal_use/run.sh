@@ -9,13 +9,13 @@ run_assignment() {
 	jar -cvf $PREFIX/$1.jar -C $PREFIX/build/ . 
 
 	echo "${yellow}	Run${reset}"
-	hadoop jar $PREFIX/$1.jar $1 $2 $HDFS_HOME/$1-output 
+	yarn jar $PREFIX/$1.jar $1 $2 $HDFS_HOME/$1-output 
 
 	echo "${yellow}	Collect the Output${reset}"
-	hadoop fs -cat $HDFS_HOME/$1-output/* > $PREFIX/output-$1.txt
+	hdfs dfs -cat $HDFS_HOME/$1-output/* > $PREFIX/output-$1.txt
 
 	echo "${yellow}	House Keeping${reset}"
-	hadoop fs -rm -r -f $HDFS_HOME/$1-output
+	hdfs dfs -rm -r -f $HDFS_HOME/$1-output
 
 	echo "${yellow}	Post Processing${reset}"
 	sort $3 $PREFIX/output-$1.txt -o $PREFIX/output-tmp.txt
