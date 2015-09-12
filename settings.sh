@@ -1,5 +1,5 @@
 #!/bin/bash
-export HDFS_HOME=/mp2
+export HDFS_HOME=/user/freek/mp2
 export XL_HOME=./internal_use
 export PREFIX=$XL_HOME/tmp
 export DATA_HOME=$PREFIX/dataset
