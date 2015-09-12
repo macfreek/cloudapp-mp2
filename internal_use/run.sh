@@ -5,7 +5,7 @@ run_assignment() {
 	cp $1.java $PREFIX/
 	rm -rf $PREFIX/build
 	mkdir -p $PREFIX/build
-	hadoop com.sun.tools.javac.Main $PREFIX/$1.java -d $PREFIX/build 
+	hadoop com.sun.tools.javac.Main -source 1.7 -target 1.7 $PREFIX/$1.java -d $PREFIX/build 
 	jar -cvf $PREFIX/$1.jar -C $PREFIX/build/ . 
 
 	echo "${yellow}	Run${reset}"
@@ -21,9 +21,17 @@ run_assignment() {
 	sort $3 $PREFIX/output-$1.txt -o $PREFIX/output-tmp.txt
 	head -n 100 $PREFIX/output-tmp.txt > $PREFIX/$1.output
 	rm $PREFIX/output-tmp.txt
-
-	md5sum $PREFIX/$1.output  > $PREFIX/$1.hash
-# 	md5sum $PREFIX/output-TitleCount.txt | awk '{ print $1 }' >> $PREFIX/results.txt
+	
+	if command -v md5sum > /dev/null; then
+		# Linux (use md5sum from GNU coreutils):
+		md5sum $PREFIX/$1.output  > $PREFIX/$1.hash
+		# md5sum $PREFIX/output-TitleCount.txt | awk '{ print $1 }' >> $PREFIX/results.txt
+	else
+		# BSD (use md5 from OpenSSL):
+		# WARNING: md5 output is not the same as md5sum output.
+		md5 $PREFIX/$1.output  > $PREFIX/$1.hash
+		# md5 -q $PREFIX/output-TitleCount.txt >> $PREFIX/results.txt
+	fi
 }
 
 echo "${green}Running Assingment A: Title Count${reset}"
