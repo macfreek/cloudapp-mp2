@@ -39,7 +39,7 @@ public class TopTitles extends Configured implements Tool {
     public int run(String[] args) throws Exception {
         Configuration conf = this.getConf();
         FileSystem fs = FileSystem.get(conf);
-        Path tmpPath = new Path("/mp2/tmp");
+        Path tmpPath = new Path(conf.get("iochainpath", "/mp2/tmp"));
         fs.delete(tmpPath, true);
 
         Job jobA = Job.getInstance(conf, "Title Count");
